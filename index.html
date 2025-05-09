@@ -1,7 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réservation de Casiers</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Inclure la librairie Supabase JS via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+    <h1>Casiers Disponibles</h1>
+    <div id="lockers-container">
+        <!-- Les casiers seront injectés ici par JavaScript -->
+        <p>Chargement des casiers...</p>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>

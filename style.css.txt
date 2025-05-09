@@ -1,0 +1,49 @@
+body {
+    font-family: sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+}
+
+#lockers-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.locker {
+    border: 1px solid #ccc;
+    padding: 15px;
+    width: 150px;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+.locker h3 {
+    margin-top: 0;
+}
+
+.locker.available {
+    border-left: 5px solid green;
+}
+
+.locker.reserved {
+    border-left: 5px solid red;
+    background-color: #ffe0e0;
+}
+
+.locker button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    border: none;
+    border-radius: 3px;
+    color: white;
+}
+
+.locker.available button {
+    background-color: #28a745; /* Vert */
+}
+.locker.reserved button {
+    background-color: #dc3545; /* Rouge */
+}
