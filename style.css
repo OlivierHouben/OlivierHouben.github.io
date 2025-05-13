@@ -30,87 +30,87 @@ main {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
     padding-bottom: 20px;
-    perspective: 1000px; /* Pour l'animation d'apparition 3D subtile */
+    perspective: 1000px;
 }
 
 .locker {
+    position: relative; /* Crucial pour le positionnement du canvas et du contenu */
     border: 1px solid #ddd;
     padding: 15px;
     border-radius: 8px;
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    overflow: visible; /* Permettre aux flammes du canvas de déborder légèrement */
 
-    /* Animation d'apparition initiale */
     opacity: 0;
     transform: translateY(25px) rotateX(-15deg) scale(0.95);
-
-    /* Transitions pour tous les changements d'état animés */
     transition: background-color 0.4s ease-in-out,
                 border-left-color 0.4s ease-in-out,
                 transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
                 box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
-                opacity 0.5s ease-out 0.1s; /* Délai pour l'opacité pour un effet plus doux */
+                opacity 0.5s ease-out 0.1s;
 }
 
-/* État visible après l'animation d'apparition */
 .locker.is-visible {
     opacity: 1;
     transform: translateY(0) rotateX(0deg) scale(1);
 }
 
 .locker:hover {
-    transform: translateY(-6px) scale(1.04); /* Effet de survol amélioré */
+    transform: translateY(-6px) scale(1.04);
     box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+    /* L'ancien effet de feu CSS est désactivé/supprimé au profit du canvas */
+    /* animation: none; */
 }
 
-.locker h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 1.2em;
-    color: #0056b3;
-}
+/*
+ Ancien effet de feu CSS (commenté ou à supprimer si remplacé par le canvas)
+@keyframes heatGlow { ... }
+.locker:hover::before, .locker:hover::after { ... }
+.locker::before, .locker::after { ... }
+*/
 
-.locker p {
-    font-size: 0.9em;
-    margin-bottom: 5px;
+.locker h3,
+.locker p,
+.locker button.action-button {
+    position: relative; /* Nécessaire pour que z-index fonctionne */
+    z-index: 1;         /* Assure que le contenu est AU-DESSUS du canvas de feu */
 }
 
 .locker .status-text {
     font-weight: bold;
 }
 
-/* Statuts spécifiques */
 .locker.available {
-    border-left: 5px solid #28a745; /* Vert */
+    border-left: 5px solid #28a745;
 }
 .locker.available .status-text {
     color: #28a745;
 }
 
 .locker.reserved {
-    border-left: 5px solid #dc3545; /* Rouge */
-    background-color: #fff3f3; /* Légèrement différent pour une meilleure transition */
+    border-left: 5px solid #dc3545;
+    background-color: #fff3f3;
 }
 .locker.reserved .status-text {
     color: #dc3545;
 }
 
 .locker.out_of_service {
-    border-left: 5px solid #ffc107; /* Jaune/Orange */
+    border-left: 5px solid #ffc107;
     background-color: #fffbf2;
-    opacity: 0.6; /* Réduit l'opacité au lieu de la classe is-visible */
-    transform: scale(0.98); /* Légèrement plus petit */
+    opacity: 0.6;
+    transform: scale(0.98);
 }
-.locker.out_of_service.is-visible { /* S'assurer que is-visible ne contrecarre pas l'opacité de out_of_service */
+.locker.out_of_service.is-visible {
     opacity: 0.6;
 }
 .locker.out_of_service .status-text {
     color: #a07404;
 }
 .locker.out_of_service button {
-    display: none; /* Pas de bouton si hors service */
+    display: none;
 }
-
 
 .locker button.action-button {
     display: block;
@@ -122,10 +122,9 @@ main {
     border-radius: 5px;
     color: white;
     font-weight: bold;
-    transition: background-color 0.2s ease, transform 0.15s ease; /* Ajout transition pour transform */
+    transition: background-color 0.2s ease, transform 0.15s ease;
 }
 
-/* Feedback au clic sur le bouton */
 .locker button.action-button:active {
     transform: scale(0.94);
 }
@@ -144,16 +143,31 @@ main {
     background-color: #c82333;
 }
 
-/* Animation de pulsation pour feedback */
 @keyframes subtlePulseFeedback {
     0% { transform: scale(1); }
     50% { transform: scale(1.05); box-shadow: 0 5px 12px rgba(0,0,0,0.12); }
-    100% { transform: scale(1); box-shadow: 0 2px 5px rgba(0,0,0,0.1); } /* Retour à l'ombre normale */
+    100% { transform: scale(1); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 }
 
 .locker.feedback-animation {
-    /* Applique l'animation de pulsation une fois */
     animation: subtlePulseFeedback 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97) 1;
+}
+
+/* Styles pour le canvas de feu */
+.fire-canvas {
+    position: absolute;
+    bottom: -10px; /* Ajuste pour que la base des flammes soit bien positionnée */
+    left: 0;
+    width: 100%;
+    height: 130%; /* Permet aux flammes de monter au-dessus du casier */
+    pointer-events: none; /* Important: ne bloque pas les clics sur le casier */
+    z-index: 0; /* Derrière le contenu du casier, mais au-dessus de son fond */
+    opacity: 0;
+    transition: opacity 0.4s ease-out;
+}
+
+.locker:hover .fire-canvas {
+    opacity: 0.85; /* Ajuste l'opacité pour l'intensité désirée */
 }
 
 
@@ -166,14 +180,12 @@ footer {
     font-size: 0.9em;
 }
 
-/* Accessibilité : Réduire le mouvement si l'utilisateur le préfère */
 @media (prefers-reduced-motion: reduce) {
   .locker,
   .locker button.action-button {
     transition: none !important;
     animation: none !important;
   }
-  /* Assurer que les éléments sont visibles sans animation d'apparition */
   .locker {
     opacity: 1;
     transform: translateY(0) rotateX(0deg) scale(1);
@@ -181,5 +193,8 @@ footer {
   .locker.out_of_service {
     opacity: 0.6;
     transform: scale(0.98);
+  }
+  .fire-canvas, .locker:hover .fire-canvas {
+      display: none; /* Cacher complètement l'animation canvas */
   }
 }
