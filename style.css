@@ -1,49 +1,185 @@
 body {
-    font-family: sans-serif;
-    margin: 20px;
-    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f0f2f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #007bff;
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8em;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 #lockers-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding-bottom: 20px;
+    perspective: 1000px; /* Pour l'animation d'apparition 3D subtile */
 }
 
 .locker {
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     padding: 15px;
-    width: 150px;
-    border-radius: 5px;
+    border-radius: 8px;
     background-color: #fff;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+    /* Animation d'apparition initiale */
+    opacity: 0;
+    transform: translateY(25px) rotateX(-15deg) scale(0.95);
+
+    /* Transitions pour tous les changements d'état animés */
+    transition: background-color 0.4s ease-in-out,
+                border-left-color 0.4s ease-in-out,
+                transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+                box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+                opacity 0.5s ease-out 0.1s; /* Délai pour l'opacité pour un effet plus doux */
+}
+
+/* État visible après l'animation d'apparition */
+.locker.is-visible {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg) scale(1);
+}
+
+.locker:hover {
+    transform: translateY(-6px) scale(1.04); /* Effet de survol amélioré */
+    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
 }
 
 .locker h3 {
     margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    color: #0056b3;
 }
 
+.locker p {
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.locker .status-text {
+    font-weight: bold;
+}
+
+/* Statuts spécifiques */
 .locker.available {
-    border-left: 5px solid green;
+    border-left: 5px solid #28a745; /* Vert */
+}
+.locker.available .status-text {
+    color: #28a745;
 }
 
 .locker.reserved {
-    border-left: 5px solid red;
-    background-color: #ffe0e0;
+    border-left: 5px solid #dc3545; /* Rouge */
+    background-color: #fff3f3; /* Légèrement différent pour une meilleure transition */
+}
+.locker.reserved .status-text {
+    color: #dc3545;
 }
 
-.locker button {
-    margin-top: 10px;
-    padding: 8px 12px;
+.locker.out_of_service {
+    border-left: 5px solid #ffc107; /* Jaune/Orange */
+    background-color: #fffbf2;
+    opacity: 0.6; /* Réduit l'opacité au lieu de la classe is-visible */
+    transform: scale(0.98); /* Légèrement plus petit */
+}
+.locker.out_of_service.is-visible { /* S'assurer que is-visible ne contrecarre pas l'opacité de out_of_service */
+    opacity: 0.6;
+}
+.locker.out_of_service .status-text {
+    color: #a07404;
+}
+.locker.out_of_service button {
+    display: none; /* Pas de bouton si hors service */
+}
+
+
+.locker button.action-button {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px 15px;
     cursor: pointer;
     border: none;
-    border-radius: 3px;
+    border-radius: 5px;
     color: white;
+    font-weight: bold;
+    transition: background-color 0.2s ease, transform 0.15s ease; /* Ajout transition pour transform */
 }
 
-.locker.available button {
-    background-color: #28a745; /* Vert */
+/* Feedback au clic sur le bouton */
+.locker button.action-button:active {
+    transform: scale(0.94);
 }
-.locker.reserved button {
-    background-color: #dc3545; /* Rouge */
+
+.locker.available button.action-button {
+    background-color: #28a745;
+}
+.locker.available button.action-button:hover {
+    background-color: #218838;
+}
+
+.locker.reserved button.action-button {
+    background-color: #dc3545;
+}
+.locker.reserved button.action-button:hover {
+    background-color: #c82333;
+}
+
+/* Animation de pulsation pour feedback */
+@keyframes subtlePulseFeedback {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); box-shadow: 0 5px 12px rgba(0,0,0,0.12); }
+    100% { transform: scale(1); box-shadow: 0 2px 5px rgba(0,0,0,0.1); } /* Retour à l'ombre normale */
+}
+
+.locker.feedback-animation {
+    /* Applique l'animation de pulsation une fois */
+    animation: subtlePulseFeedback 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97) 1;
+}
+
+
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    background-color: #343a40;
+    color: #f8f9fa;
+    font-size: 0.9em;
+}
+
+/* Accessibilité : Réduire le mouvement si l'utilisateur le préfère */
+@media (prefers-reduced-motion: reduce) {
+  .locker,
+  .locker button.action-button {
+    transition: none !important;
+    animation: none !important;
+  }
+  /* Assurer que les éléments sont visibles sans animation d'apparition */
+  .locker {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg) scale(1);
+  }
+  .locker.out_of_service {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
 }

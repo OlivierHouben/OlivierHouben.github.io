@@ -3,17 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Réservation de Casiers</title>
+    <title>Réservation de Casiers Animée</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Inclure la librairie Supabase JS via CDN -->
+    <!-- Librairie Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Optionnel : AutoAnimate pour des animations faciles d'ajout/suppression (si tu l'utilises plus tard) -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@formkit/auto-animate@0.8.1/index.min.js"></script> -->
 </head>
 <body>
-    <h1>Casiers Disponibles</h1>
-    <div id="lockers-container">
-        <!-- Les casiers seront injectés ici par JavaScript -->
-        <p>Chargement des casiers...</p>
-    </div>
+    <header>
+        <h1>Système de Réservation de Casiers</h1>
+    </header>
+    <main>
+        <div id="lockers-container">
+            <!-- Les casiers seront injectés ici par JavaScript -->
+            <p>Chargement des casiers...</p>
+        </div>
+    </main>
+    <footer>
+        <p>© 2023 Mon App Casiers Animée</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
